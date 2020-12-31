@@ -1,0 +1,97 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <title>Document</title>
+</head>
+
+<body onload="search(21);">
+
+    <div class="container">
+
+
+
+        <br>
+        <br>
+        <br>
+
+        <!-- <input class="form-control" type="text"  id="city" placeholder="请输入要查询的城市名称" /> -->
+
+
+        <br>
+        <hr>
+
+
+        <table class="table table-striped table-bordered table-hover">
+            <tbody id="tb">
+
+
+
+            </tbody>
+
+
+        </table>
+
+        <ul class="pagination">
+            <li><a class="select" href="">&laquo;</a>
+            <li><a class="select" href="javascript:void(0)" id="1">1</a>
+            <li><a class="select" href="javascript:void(0)" id="2">2</a>
+            <li><a class="select" href="javascript:void(0)" id="3">3</a>
+            <li><a class="select" href="javascript:void(0)" id="4">4</a>
+            <li><a class="select" href="javascript:void(0)" id="5">5</a>
+            <li><a class="select" href="#">&raquo;</a>
+        </ul>
+
+
+
+    </div>
+    <script type="text/javascript">
+        //js代码
+        function popfalse() {
+            return false;
+        }
+        //点击按钮触发的天气预报查询方法
+            
+            $(".select").click(function () {
+                vid = $(this).attr("id");
+                page = 20 +parseInt(vid);
+                search(page);
+            })
+        function search(page) {
+            //1获取文本框城市信息
+            //2 发后台发起ajax请求 jquery ｛请求的地址 请求的方式 请求参数 回调函数｝
+            console.log(page);
+            $.ajax({
+                type: "POST",
+                url: "https://api.apiopen.top/getImages",
+                data: "page=" + page + "&count=20",
+                
+                success: function (data) {
+                    // alert(data);
+                    console.log(data.result);
+                    var tbody = $("#tb")
+                    tbody.html("");
+                    var len = data.result.length;
+                    for (var index = 0; index < len; index += 4) {
+                        var w = data.result[index];
+                        var img = w.img;
+                        var str = "<tr><th>" + "<a href='" + data.result[index].img + "'target='_blank'>" + "<img width='200px'  src='" + data.result[index].img + "'></a></th>"
+                            + "<th>" + "<a href='" + data.result[index + 1].img + "'target='_blank'>" + "<img width=200px' src='" + data.result[index + 1].img + "'></a></th>"
+                            + "<th>" + "<a href='" + data.result[index + 2].img + "'target='_blank'>" + "<img width='200px' src='" + data.result[index + 2].img + "'></a></th>"
+                            + "<th>" + "<a href='" + data.result[index + 3].img + "'target='_blank'>" + "<img width='200px' src='" + data.result[index + 3].img + "'></a></th><tr>"
+                        tbody.append(str);
+                    }
+                }
+
+
+            });
+
+        }
+
+    </script>
+</body>
+
+</html>
